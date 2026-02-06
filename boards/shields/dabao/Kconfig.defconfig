@@ -1,0 +1,10 @@
+if SHIELD_DABAO
+
+# Name must be less than 16 characters long!
+config ZMK_KEYBOARD_NAME
+    default "dabao"
+
+config ZMK_KSCAN_MATRIX_POLLING
+    default y
+   
+endif
