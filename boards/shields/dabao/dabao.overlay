@@ -3,46 +3,27 @@
 /* Extend the root node to add our keyboard configuration */
 &{/} {
     chosen {
-        zmk,kscan = &kscan_composite;
+        zmk,kscan = &kscan_local;
+        zmk,matrix-transform = &default_transform;
     };
 
-    /* Matrix Transform to map both halves into one layout */
+    /* Matrix Transform for the full keyboard layout */
     default_transform: matrix_transform {
         compatible = "zmk,matrix-transform";
-        columns = <10>; // 5 columns per side
+        columns = <5>; // 5 columns for now (single side)
         rows = <4>;    // 4 rows (Top, Home, Bottom, Thumb)
 
         map = <
-            RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4)  RC(0,5) RC(0,6) RC(0,7) RC(0,8) RC(0,9)
-            RC(1,0) RC(1,1) RC(1,2) RC(1,3) RC(1,4)  RC(1,5) RC(1,6) RC(1,7) RC(1,8) RC(1,9)
-            RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4)  RC(2,5) RC(2,6) RC(2,7) RC(2,8) RC(2,9)
-                            RC(3,2) RC(3,3) RC(3,4)  RC(3,5) RC(3,6) RC(3,7)
+            RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4)
+            RC(1,0) RC(1,1) RC(1,2) RC(1,3) RC(1,4)
+            RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4)
+                            RC(3,2) RC(3,3) RC(3,4)
         >;
     };
 
-    /* Composite Kscan: Combines direct GPIO and the Expander */
-    kscan_composite: kscan_composite {
-        compatible = "zmk,kscan-composite";
-        label = "KSCAN_COMPOSITE";
-        rows = <4>;
-        columns = <10>;
-
-        /* Local half (Direct GPIO) */
-        kscan0: kscan_direct {
-            kscan = <&kscan_local>;
-        };
-
-        /* Remote half (MCP23017) */
-        kscan1: kscan_expander {
-            kscan = <&kscan_remote>;
-            column-offset = <5>; // Offset for the second half
-        };
-    };
-
-    /* 1. Primary Half: Direct GPIO scan */
+    /* Primary Half: Direct GPIO scan */
     kscan_local: kscan_local {
         compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN_LOCAL";
         diode-direction = "col2row";
 
         row-gpios
@@ -60,39 +41,6 @@
             , <&gpio0 9 GPIO_ACTIVE_HIGH>  // Col Inner (P0.09)
             ;
     };
-
-    /* 2. Secondary Half: Remote kscan using I2C Expander */
-    kscan_remote: kscan_remote {
-        compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN_REMOTE";
-        diode-direction = "col2row";
-
-        row-gpios
-            = <&mcp23017 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // GPB0
-            , <&mcp23017 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // GPB1
-            , <&mcp23017 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // GPB2
-            , <&mcp23017 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // GPB3
-            ;
-
-        col-gpios
-            = <&mcp23017 0 GPIO_ACTIVE_HIGH> // GPA0
-            , <&mcp23017 1 GPIO_ACTIVE_HIGH> // GPA1
-            , <&mcp23017 2 GPIO_ACTIVE_HIGH> // GPA2
-            , <&mcp23017 3 GPIO_ACTIVE_HIGH> // GPA3
-            , <&mcp23017 4 GPIO_ACTIVE_HIGH> // GPA4
-            ;
-    };
 };
 
-/* Configure I2C interface for the MCP23017 expander */
-&i2c0 {
-    status = "okay";
 
-    mcp23017: mcp23017@20 {
-        compatible = "microchip,mcp23017";
-        reg = <0x20>; // Default I2C address
-        label = "MCP23017";
-        gpio-controller;
-        #gpio-cells = <2>;
-    };
-};
