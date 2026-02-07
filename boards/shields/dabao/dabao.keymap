@@ -8,43 +8,43 @@
 
         default_layer {
             // -----------------------------------------------------------------------------------------
-            // | TAB  |  Q  |  W  |  E  |  R  |
-            // | CTRL |  A  |  S  |  D  |  F  |
-            // | SHFT |  Z  |  X  |  C  |  V  |
-            //           | GUI | LWR | SPC |
+            // |  Y   |  U  |  I  |  O  |  P  |
+            // |  H   |  J  |  K  |  L  | ;:  |
+            // |  N   |  M  |  ,< |  .> | /?  |
+            //           | ALT | RSE | BSPC |
             bindings = <
-                &kp TAB   &kp Q &kp W &kp E &kp R
-                &kp LCTRL &kp A &kp S &kp D &kp F
-                &kp LSHFT &kp Z &kp X &kp C &kp V
-                               &kp LGUI &mo 1 &kp SPACE
+                &kp Y     &kp U     &kp I     &kp O     &kp P
+                &kp H     &kp J     &kp K     &kp L     &kp SEMI
+                &kp N     &kp M     &kp COMMA &kp DOT   &kp SLASH
+                                   &kp RALT  &mo 1      &kp BSPC
             >;
         };
 
         lower_layer {
             // -----------------------------------------------------------------------------------------
-            // |  ESC |  1  |  2  |  3  |  4  |
-            // | BTCLR| BT1 | BT2 | BT3 | BT4 |
-            // | SHFT |     |     |     |     |
-            //           | GUI |     | ENT |
+            // |  6   |  7  |  8  |  9  |  0  |
+            // |  -   |  =  |  [  |  ]  |  \\ |
+            // |      |     |     |     |     |
+            //           | ALT |     | DEL |
             bindings = <
-                &kp ESC    &kp N1       &kp N2       &kp N3       &kp N4
-                &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3
-                &kp LSHFT  &trans       &trans       &trans       &trans
-                                        &kp LGUI     &trans       &kp ENTER
+                &kp N6    &kp N7    &kp N8    &kp N9    &kp N0
+                &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT  &kp BSLH
+                &trans    &trans    &trans    &trans    &trans
+                                   &kp RALT  &trans     &kp DEL
             >;
         };
 
         raise_layer {
             // -----------------------------------------------------------------------------------------
-            // |  ~   |  !  |  @  |  #  |  $  |
-            // | CTRL |     |     |     |     |
-            // | SHFT |     |     |     |     |
-            //           | GUI | MO2 | ENT |
+            // |  ^   |  &  |  *  |  (  |  )  |
+            // |  _   |  +  |  {  |  }  |  |  |
+            // |      |     |     |     |     |
+            //           | ALT | MO2 | ENT |
             bindings = <
-                &kp TILDE &kp EXCL &kp AT &kp HASH &kp DLLR
-                &kp LCTRL &trans   &trans &trans   &trans
-                &kp LSHFT &trans   &trans &trans   &trans
-                                   &kp LGUI &mo 2 &kp ENTER
+                &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR &kp RPAR
+                &kp UNDER &kp PLUS  &kp LBRC        &kp RBRC &kp PIPE
+                &trans    &trans    &trans          &trans   &trans
+                                   &kp RALT  &mo 2  &kp ENTER
             >;
         };
     };
