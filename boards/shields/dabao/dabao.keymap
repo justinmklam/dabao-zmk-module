@@ -7,44 +7,38 @@
         compatible = "zmk,keymap";
 
         default_layer {
-            // -----------------------------------------------------------------------------------------
-            // |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  |
-            // |  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  | ;:  |
-            // |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,< |  .> | /?  |
-            //                | LGUI | LWR | SPC | BSPC | RSE | RALT |
             bindings = <
-                &kp Q     &kp W     &kp E     &kp R     &kp T     &kp Y     &kp U     &kp I     &kp O     &kp P
-                &kp A     &kp S     &kp D     &kp F     &kp G     &kp H     &kp J     &kp K     &kp L     &kp SEMI
-                &kp Z     &kp X     &kp C     &kp V     &kp B     &kp N     &kp M     &kp COMMA &kp DOT   &kp SLASH
-                                &kp LGUI &mo 1 &kp SPACE &kp BSPC &mo 2 &kp RALT
+                &kp Q        &kp W       &kp E        &kp R       &kp T        &kp Y        &kp U       &kp I            &kp O         &kp P
+                &kp A        &kp S       &kp D        &kp F       &kp G        &kp H        &kp J       &kp K            &kp L         &kp SEMI
+                &mt LSHFT Z  &mt LALT X  &mt LCTRL C  &mt LGUI V  &kp B        &kp N        &mt RGUI M  &mt RCTRL COMMA  &mt RALT DOT  &mt RSHFT SLASH
+                                         &kp LGUI     &kp LSHFT   &lt 1 BSPC   &lt 3 ENTER  &lt 2 SPACE &kp RALT
             >;
         };
 
-        lower_layer {
-            // -----------------------------------------------------------------------------------------
-            // |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  0  |
-            // |  -  |  =  |  [  |  ]  |  \\ |  ;  |  '  |  ,  |  .  |  /  |
-            // |     |     |     |     |     |     |     |     |     |     |
-            //                | LGUI |     | ENT | DEL |     | RALT |
+        symbols_layer {
             bindings = <
-                &kp N1    &kp N2    &kp N3    &kp N4    &kp N5    &kp N6    &kp N7    &kp N8    &kp N9    &kp N0
-                &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT  &kp BSLH  &kp SEMI  &kp SQT   &kp COMMA &kp DOT   &kp SLASH
-                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans
-                                &kp LGUI &trans &kp ENTER &kp DEL &trans &kp RALT
+                &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT &kp N7    &kp N8    &kp N9    &kp N9    &kp N0
+                &kp MINUS &kp EQUAL &kp LBKT  &kp RBKT  &kp BSLH  &kp N4    &kp N5    &kp N6    &kp DOT   &kp SLASH
+                &trans    &trans    &trans    &trans    &trans    &kp N1    &kp N2    &kp N3    &trans    &trans
+                                    &trans    &trans    &trans    &trans    &kp N0    &trans
             >;
         };
 
-        raise_layer {
-            // -----------------------------------------------------------------------------------------
-            // |  !  |  @  |  #  |  $  |  %  |  ^  |  &  |  *  |  (  |  )  |
-            // |  _  |  +  |  {  |  }  |  |  |  :  |  "  |  <  |  >  |  ?  |
-            // |     |     |     |     |     |     |     |     |     |     |
-            //                | LGUI | MO2 | ENT |     |     | RALT |
+        nav_layer {
             bindings = <
                 &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR &kp RPAR
                 &kp UNDER &kp PLUS  &kp LBRC  &kp RBRC  &kp PIPE  &kp COLON &kp DQT   &kp LT         &kp GT   &kp QMARK
                 &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans        &trans   &trans
-                                &kp LGUI &mo 2 &kp ENTER &trans &trans &kp RALT
+                                    &trans    &trans    &trans    &trans    &trans    &trans
+            >;
+        };
+
+        misc_layer {
+            bindings = <
+                &kp EXCL  &kp AT    &kp HASH  &kp DLLR  &kp PRCNT &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_CLR &bt BT_CLR_ALL
+                &kp UNDER &kp PLUS  &kp LBRC  &kp RBRC  &kp PIPE  &kp COLON &kp DQT   &kp LT         &kp GT   &kp QMARK
+                &trans    &trans    &trans    &trans    &trans    &trans    &trans    &trans        &trans   &trans
+                                    &trans    &trans    &trans    &trans    &trans    &trans
             >;
         };
     };
