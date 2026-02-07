@@ -1,46 +1,83 @@
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <dt-bindings/pinctrl/nrf-pinctrl.h>
 
 /* Extend the root node to add our keyboard configuration */
 &{/} {
     chosen {
-        zmk,kscan = &kscan_local;
+        zmk,kscan = &kscan_composite;
         zmk,matrix-transform = &default_transform;
     };
 
-    /* Matrix Transform for the full keyboard layout */
+    /* Matrix Transform for the full split keyboard layout (left half reversed) */
     default_transform: matrix_transform {
         compatible = "zmk,matrix-transform";
-        columns = <5>; // 5 columns for now (single side)
-        rows = <4>;    // 4 rows (Top, Home, Bottom, Thumb)
-
+        columns = <10>; // 5 left + 5 right
+        rows = <4>;
         map = <
-            RC(0,4) RC(0,3) RC(0,2) RC(0,1) RC(0,0)
-            RC(1,4) RC(1,3) RC(1,2) RC(1,1) RC(1,0)
-            RC(2,4) RC(2,3) RC(2,2) RC(2,1) RC(2,0)
-                            RC(3,4) RC(3,3) RC(3,2)
+            RC(0,4) RC(0,3) RC(0,2) RC(0,1) RC(0,0)  RC(0,5) RC(0,6) RC(0,7) RC(0,8) RC(0,9)
+            RC(1,4) RC(1,3) RC(1,2) RC(1,1) RC(1,0)  RC(1,5) RC(1,6) RC(1,7) RC(1,8) RC(1,9)
+            RC(2,4) RC(2,3) RC(2,2) RC(2,1) RC(2,0)  RC(2,5) RC(2,6) RC(2,7) RC(2,8) RC(2,9)
+                                RC(3,2) RC(3,1) RC(3,0)  RC(3,5) RC(3,6) RC(3,7)
         >;
     };
 
-    /* Primary Half: Direct GPIO scan */
-    kscan_local: kscan_local {
+    /* Composite Kscan: Combines local and expander halves */
+    kscan_composite: kscan_composite {
+        compatible = "zmk,kscan-composite";
+        rows = <4>;
+        columns = <10>;
+
+        kscan0: kscan_right {
+            kscan = <&kscan_right>;
+        };
+        kscan1: kscan_left {
+            kscan = <&kscan_left>;
+        };
+    };
+
+    /* Right Half: Direct GPIO scan (as before) */
+    kscan_right: kscan_right {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
+        row-gpios = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        col-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>, <&gpio1 13 GPIO_ACTIVE_HIGH>, <&gpio1 11 GPIO_ACTIVE_HIGH>, <&gpio0 10 GPIO_ACTIVE_HIGH>, <&gpio0 9 GPIO_ACTIVE_HIGH>;
+    };
 
-        row-gpios
-            = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row Top (P0.31)
-            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // Row Home (P0.29)
-            , <&gpio0 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // Row Bottom (P0.02)
-            , <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // Row Thumb (P1.06)
-            ;
-
-        col-gpios
-            = <&gpio1 15 GPIO_ACTIVE_HIGH> // Col Pinky (P1.15)
-            , <&gpio1 13 GPIO_ACTIVE_HIGH> // Col Ring (P1.13)
-            , <&gpio1 11 GPIO_ACTIVE_HIGH> // Col Middle (P1.11)
-            , <&gpio0 10 GPIO_ACTIVE_HIGH> // Col Index (P0.10)
-            , <&gpio0 9 GPIO_ACTIVE_HIGH>  // Col Inner (P0.09)
-            ;
+    /* Left Half: MCP23017 expander scan */
+    kscan_left: kscan_left {
+        compatible = "zmk,kscan-gpio-matrix";
+        diode-direction = "col2row";
+        row-gpios = <&mcp23017 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, <&mcp23017 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, <&mcp23017 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>, <&mcp23017 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+        col-gpios = <&mcp23017 4 GPIO_ACTIVE_HIGH>, <&mcp23017 3 GPIO_ACTIVE_HIGH>, <&mcp23017 2 GPIO_ACTIVE_HIGH>, <&mcp23017 1 GPIO_ACTIVE_HIGH>, <&mcp23017 0 GPIO_ACTIVE_HIGH>;
     };
 };
 
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 17)>, <NRF_PSEL(TWIM_SCL, 0, 20)>;
+            bias-pull-up;
+        };
+    };
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 17)>, <NRF_PSEL(TWIM_SCL, 0, 20)>;
+            low-power-enable;
+        };
+    };
+};
 
+&i2c0 {
+    status = "okay";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
+    mcp23017: mcp23017@20 {
+        compatible = "microchip,mcp230xx";
+        reg = <0x20>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        ngpios = <16>;
+        status = "okay";
+    };
+};
