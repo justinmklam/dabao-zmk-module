@@ -13,4 +13,3 @@ include:
     cmake-args: -DCONFIG_ZMK_STUDIO=y
     artifact-name: dabao_with_studio
 #
----
