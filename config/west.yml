@@ -10,15 +10,17 @@ manifest:
       url-base: https://github.com/infused-kim
     - name: mwlaboratories
       url-base: https://github.com/mwlaboratories
+    - name: badjeff
+      url-base: https://github.com/badjeff
   projects:
     - name: zmk
-      remote: zmkfirmware
+      remote: badjeff
       import: app/west.yml
 
     # zmk module for PS/2 mouse / TP driver
     - name: kb_zmk_ps2_mouse_trackpoint_driver
       # remote: infused-kim
-      remote: mwlaboratories
+      remote: badjeff
       revision: main
   self:
     path: config
