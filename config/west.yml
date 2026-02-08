@@ -8,19 +8,17 @@ manifest:
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
     - name: infused-kim
       url-base: https://github.com/infused-kim
+    - name: mwlaboratories
+      url-base: https://github.com/mwlaboratories
   projects:
-    # - name: zmk
-    #   remote: zmkfirmware
-    #   import: app/west.yml
-
     - name: zmk
-      remote: infused-kim
-      revision: pr-testing/mouse_ps2_module_base
+      remote: zmkfirmware
       import: app/west.yml
 
     # zmk module for PS/2 mouse / TP driver
     - name: kb_zmk_ps2_mouse_trackpoint_driver
-      remote: infused-kim
+      # remote: infused-kim
+      remote: mwlaboratories
       revision: main
   self:
     path: config
