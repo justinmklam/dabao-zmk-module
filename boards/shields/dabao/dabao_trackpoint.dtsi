@@ -114,9 +114,9 @@
 
 / {
     tpoint0: tpoint0 {
-				status = "disabled";
+        status = "disabled";
         compatible = "zmk,input-mouse-ps2";
-	      ps2-device = <&uart_ps2>;
+        ps2-device = <&uart_ps2>;
 #ifdef MOUSE_PS2_PIN_RST_PRO_MICRO
         rst-gpios = MOUSE_PS2_PIN_RST_PRO_MICRO;
 #endif
