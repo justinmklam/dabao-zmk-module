@@ -32,7 +32,7 @@ Replace `<board>` with the name of the board (e.g., `nice_nano`) and `<shield>` 
 
 | Board/Shield | Command |
 |--------------|---------|
-| dabao   | `west build -b nice_nano -- -DSHIELD=dabao -DZMK_EXTRA_MODULES=/abs/path/to/kb_zmk_ps2_mouse_trackpoint_driver/` |
+| [dabao](https://github.com/justinmklam/dabao) | `west build -b nice_nano -- -DSHIELD=dabao -DZMK_EXTRA_MODULES=/abs/path/to/kb_zmk_ps2_mouse_trackpoint_driver/` |
 
 ## Flashing Firmware
 
